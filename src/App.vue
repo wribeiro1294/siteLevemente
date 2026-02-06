@@ -86,7 +86,6 @@ const onSignup = (data) => {
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contato">Contato</a></li>
         </ul>
-        <button class="nav-cta">Começar Agora</button>
       </nav>
     </div>
   </header>
@@ -233,7 +232,7 @@ const onSignup = (data) => {
       <div class="cta-content">
         <h2>Pronto para transformar sua vida?</h2>
         <p>Comece sua jornada de bem-estar hoje mesmo e descubra o seu melhor potencial.</p>
-        <button class="btn-primary large">Começar agora</button>
+        <button class="btn-primary large" @click="showSignup = true">Começar agora</button>
       </div>
     </div>
   </section>
@@ -262,17 +261,8 @@ const onSignup = (data) => {
             <ul>
               <li><a href="#inicio">Início</a></li>
               <li><a href="#sobre">Sobre</a></li>
-              <li><a href="#servicos">Serviços</a></li>
+              <li><a href="#servicos">Conteúdos</a></li>
               <li><a href="#faq">FAQ</a></li>
-            </ul>
-          </div>
-          <div class="link-group">
-            <h4>Serviços</h4>
-            <ul>
-              <li><a href="#">Bem-estar Mental</a></li>
-              <li><a href="#">Saúde Física</a></li>
-              <li><a href="#">Consultorias</a></li>
-              <li><a href="#">Programas</a></li>
             </ul>
           </div>
           <div class="link-group">
@@ -916,6 +906,62 @@ h4 { font-size: 1.25rem; }
 
 .footer-legal a:hover {
   color: white;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-image {
+    margin-top: 16px;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .about-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-image {
+    margin-top: 16px;
+  }
+
+  .team {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .team-card {
+    align-items: center;
+    text-align: center;
+  }
+
+  .faq-container {
+    padding: 0 16px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
 }
 
 /* Responsividade */
