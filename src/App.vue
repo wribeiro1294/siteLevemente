@@ -5,23 +5,23 @@ import SignupModal from './components/SignupModal.vue'
 // Dados para FAQ
 const faqs = ref([
   {
-    question: 'O que é o LeveMENTE?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    open: false
+    question: 'Sobre o projeto',
+    answer: 'Esse não é mais um daqueles desafios que prometem a perda de peso em um prazo curto de tempo. É um projeto para a vida toda,dito isso é com imenso orgulho e satisfação que apresentamos o PROJETO LEVEMENTE A ideia surgiu baseada em experiências pessoais na luta contra a obesidade e com isso a percepção da necessidade de um acompanhamento completo, corpo e mente, para que não seja apenas mais uma promessa de mudança de vida esquecida no bloco de metas anual. Nosso objetivo é proporcionar sua transformação sustentável através de orientações, informações e autonomia',
+    open: true
   },
   {
     question: 'Como funciona o programa?',
-    answer: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    answer: 'Serão 15 dias de acompanhamento com profissionais especializados em emagrecimento com conteúdos exclusivos sobre alimentação, atividade fisica e saúde mental. Você terá acesso a um cardápio, receitas práticas e fáceis, uma planilha de treinos para serem feitos em casa ou na academia e suporte psicológico para que essa jornada seja leve e mentalmente saudável. Após os 15 dias todo material compartilhado continuará sendo seu! E teremos premiações pra quem tiver o melhor desempenho durante esse período.',
     open: false
   },
   {
-    question: 'Quais são os benefícios?',
-    answer: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+    question: 'Investimento',
+    answer: 'R$ 49,90',
     open: false
   },
   {
     question: 'Como posso me inscrever?',
-    answer: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    answer: 'Preencha o nosso formulário em ',
     open: false
   }
 ])
@@ -29,19 +29,32 @@ const faqs = ref([
 // Dados para serviços
 const services = ref([
   {
-    icon: '🧘‍♀️',
-    title: 'Bem-estar Mental',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.'
+    title: '',
+    description: 'A importância do sono na recuperação e nos resultados de saúde.'
   },
   {
-    icon: '💪',
-    title: 'Saúde Física',
-    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.'
+    title: '',
+    description: 'Compras no supermercado: o que colocar no carrinho para uma rotina saudável.'
   },
   {
-    icon: '🎯',
-    title: 'Objetivos Personalizados',
-    description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.'
+    title: '',
+    description: 'Fome física vs. Fome emocional:aprendendo a diferenciar.'
+  },
+  {
+    title: '',
+    description: 'Folha de registro de todas as refeições, com local e data. PSICOEDUCAÇÃO SOBRE.'
+  },
+  {
+    title: '',
+    description: 'Benefícios dos alimentos integrais e como incluí-los na rotina.'
+  },
+  {
+    title: '',
+    description: 'Benefícios dos alimentos integrais e como incluí-los na rotinaComo transformar pequenas vitórias em grandes hábitos (reforço positivo).'
+  },
+   {
+    title: '',
+    description: 'Aula de alongamento e mobilidade para fazer em casa'
   }
 ])
 
@@ -83,24 +96,18 @@ const onSignup = (data) => {
     <div class="container">
       <div class="hero-content">
         <div class="hero-text fade-up" style="animation-delay:120ms">
-          <h1>Transforme sua vida com <span class="highlight">equilíbrio</span> e bem-estar</h1>
-          <p class="hero-subtitle">Descubra o caminho para uma vida mais saudável, equilibrada e plena. Nossa abordagem integra saúde mental e física para resultados duradouros.</p>
+          <h1>Mudança da <span class="highlight">mente</span> com leveza</h1>
+          <p class="hero-subtitle">Descubra o caminho para uma vida mais saudavel, equilibrada e sustentavel. Nossa abordagem integra saúde mental e fisica para resultados reais e duradouros.</p>
           <div class="hero-buttons">
             <button class="btn-primary" @click="showSignup = true">Comece sua jornada</button>
-            <button class="btn-secondary">Saiba mais</button>
+            <button class="btn-secondary"><a href="#faq">Saiba mais</a></button>
           </div>
           <div class="hero-stats">
-            <div class="stat">
-              <span class="stat-number">2500+</span>
-              <span class="stat-label">Pessoas transformadas</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">98%</span>
-              <span class="stat-label">Taxa de satisfação</span>
-            </div>
+            
+            
           </div>
         </div>
-  <div class="hero-image fade-up" style="animation-delay:240ms">
+     <div class="hero-image fade-up" style="animation-delay:240ms">
           <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pessoa praticando exercícios" />
           <div class="hero-card">
             <div class="card-icon">✨</div>
@@ -118,15 +125,12 @@ const onSignup = (data) => {
   <section id="servicos" class="services">
     <div class="container">
       <div class="section-header">
-        <h2>Nossos Serviços</h2>
-        <p>Oferecemos uma abordagem completa para o seu bem-estar</p>
+        <h2>CONTEÚDOS COMO:</h2>
       </div>
       <div class="services-grid">
         <div v-for="service in services" :key="service.title" class="service-card">
-          <div class="service-icon">{{ service.icon }}</div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
-          <button class="service-btn">Saiba mais →</button>
         </div>
       </div>
     </div>
@@ -139,7 +143,7 @@ const onSignup = (data) => {
         <div class="about-text">
           <div class="section-tag">Sobre nós</div>
           <h2>Transformando vidas através do equilíbrio</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>Te ajudaremos a ter uma rotina funcional, disciplina e constância. Introduzindo hábitos saudáveis que irão sustentar todo o seu processo.</p>
           <div class="about-features">
             <div class="feature">
               <div class="feature-icon">✓</div>
@@ -158,6 +162,43 @@ const onSignup = (data) => {
         </div>
         <div class="about-image">
           <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Equipe profissional" />
+        </div>
+      </div>
+      <!-- Team Section -->
+      <div class="team">
+        <h2 class="team-title">Nossos Profissionais</h2>
+        <div class="team-card">
+          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <h3>Thaissa</h3>
+          <p>Nutricionista</p>
+          <div class="team-social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📷</a>
+            <a href="#" aria-label="LinkedIn">💼</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <h3>Wilka</h3>
+          <p>Psicologa</p>
+          <div class="team-social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📷</a>
+            <a href="#" aria-label="LinkedIn">💼</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <h3>Gabriel</h3>
+          <p>Personal Trainer</p>
+          <div class="team-social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Instagram">📷</a>
+            <a href="#" aria-label="LinkedIn">💼</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+          </div>
         </div>
       </div>
     </div>
@@ -434,7 +475,7 @@ h4 { font-size: 1.25rem; }
   min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: #d5ddc8; /* Updated background color to #d5ddc8 */
   overflow: hidden;
 }
 
@@ -650,6 +691,60 @@ h4 { font-size: 1.25rem; }
   width: 100%;
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Team Section */
+.team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.team-title {
+  grid-column: span 3;
+  text-align: center;
+  margin-bottom: 32px;
+  font-size: 2rem;
+  color: #0f172a;
+}
+
+.team-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.team-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.team-social {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.team-social a {
+  color: #065f46;
+  font-size: 1.25rem;
+  transition: color 0.2s ease;
+}
+
+.team-social a:hover {
+  color: #10b981;
 }
 
 /* FAQ Section */
