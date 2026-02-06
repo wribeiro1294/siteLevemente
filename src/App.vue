@@ -255,7 +255,7 @@ const onSignup = (data) => {
           </div>
           <p>Transformando vidas através do equilíbrio entre corpo e mente. Sua jornada de bem-estar começa aqui.</p>
           <div class="social-links">
-            <a href="#" aria-label="Instagram">📷</a>
+            <!-- <a href="#" aria-label="Instagram">📷</a> -->
           </div>
         </div>
         <div class="footer-links">
@@ -271,8 +271,7 @@ const onSignup = (data) => {
           <div class="link-group">
             <h4>Contato</h4>
             <ul>
-              <li><a href="#">(11) 99999-9999</a></li>
-              <li><a href="#">contato@levemente.com</a></li>
+              <li><a href="#">pjlevemente@gmail.com</a></li>
             </ul>
           </div>
         </div>
