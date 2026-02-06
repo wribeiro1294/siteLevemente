@@ -1,12 +1,28 @@
 <script setup>
-import { reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, watch, onBeforeUnmount } from 'vue'
 
-const props = defineProps({ show: Boolean })
+const props = defineProps({
+  show: Boolean,
+
+  appsScriptUrl: {
+    type: String,
+    required: true
+  }
+})
+
 const emit = defineEmits(['update:show', 'submitted'])
 
 const submitting = ref(false)
 const submitted = ref(false)
-const form = reactive({ name: '', email: '', phone: '', message: '' })
+const serverMessage = ref('')
+
+const form = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  message: ''
+})
+
 const firstInput = ref(null)
 
 const close = () => {
@@ -14,51 +30,136 @@ const close = () => {
 }
 
 const submit = async (e) => {
-  e && e.preventDefault()
+  e.preventDefault()
+
   if (!form.name || !form.email) {
     alert('Por favor informe nome e e-mail')
     return
   }
+
+  if (!props.appsScriptUrl || !props.appsScriptUrl.endsWith('/exec')) {
+    alert('URL do Apps Script inválida')
+    return
+  }
+
   submitting.value = true
-  await new Promise((r) => setTimeout(r, 800))
-  submitting.value = false
-  submitted.value = true
-  // emit data to parent
-  emit('submitted', { ...form })
-  // clear
-  form.name = ''
-  form.email = ''
-  form.phone = ''
-  form.message = ''
-  // close after short delay to show success
-  setTimeout(() => close(), 900)
+  serverMessage.value = ''
+
+  const payload = {
+    nome: form.name,
+    email: form.email,
+    telefone: form.phone,
+    mensagem: form.message
+  }
+
+  try {
+    // Use a "simple" content type to avoid CORS preflight in browsers.
+    // Apps Script can still read the raw POST body via e.postData.contents.
+    const res = await fetch(props.appsScriptUrl, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=UTF-8'
+      },
+      body: JSON.stringify(payload)
+    })
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      throw new Error(`HTTP ${res.status} - ${text}`)
+    }
+
+    // Try to parse JSON response. If parsing fails, fall back to text and
+    // treat a 200 OK as success (Apps Script sometimes returns plain text).
+    let data = null
+    let textBody = null
+    try {
+      data = await res.json()
+    } catch (err) {
+      // not JSON — read raw text for diagnostics
+      textBody = await res.text().catch(() => '')
+      console.warn('Response not JSON, body:', textBody)
+    }
+
+    // Determine success: prefer explicit {success:true}, else accept 200 OK
+    const successFromBody = data?.success === true
+    if (!successFromBody && data && data.success === false) {
+      // explicit failure from script
+      throw new Error(data?.message || 'Falha ao salvar na planilha')
+    }
+
+    if (!successFromBody && !data) {
+      // no JSON returned; but HTTP 200 — consider success, but surface textBody
+      serverMessage.value = textBody ? String(textBody) : 'Enviado com sucesso.'
+    } else if (successFromBody) {
+      serverMessage.value = data.message || 'Enviado com sucesso 🎉'
+    }
+
+    submitted.value = true
+    serverMessage.value = 'Enviado com sucesso 🎉'
+
+    emit('submitted', { ...form })
+
+    // limpa formulário
+    form.name = ''
+    form.email = ''
+    form.phone = ''
+    form.message = ''
+
+    setTimeout(close, 900)
+
+  } catch (err) {
+    console.error(err)
+    serverMessage.value = `Erro ao enviar: ${err.message}`
+  } finally {
+    submitting.value = false
+  }
 }
 
 const onKey = (e) => {
   if (e.key === 'Escape') close()
 }
 
+// Formata valores de telefone (BR): aceita até 11 dígitos e formata como
+// (##) ####-#### ou (##) #####-#### dependendo do tamanho.
+const formatPhoneValue = (value) => {
+  const digits = String(value || '').replace(/\D/g, '').slice(0, 11)
+  if (!digits) return ''
+  if (digits.length <= 2) return `(${digits}`
+  if (digits.length <= 6) return `(${digits.slice(0,2)}) ${digits.slice(2)}`
+  if (digits.length <= 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`
+  // 11 dígitos (DDD + 9xxxx-xxxx)
+  return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`
+}
+
+const onPhoneInput = (e) => {
+  // Usa o evento direto para pegar o valor bruto do input (inclui o cursor)
+  const raw = e.target.value
+  const formatted = formatPhoneValue(raw)
+  form.phone = formatted
+}
+
 watch(() => props.show, (val) => {
   if (val) {
-    // small delay to ensure element rendered
-    setTimeout(() => firstInput.value && firstInput.value.focus(), 80)
+    setTimeout(() => firstInput.value?.focus(), 80)
     window.addEventListener('keydown', onKey)
   } else {
     window.removeEventListener('keydown', onKey)
-    submitting.value = false
     submitted.value = false
+    serverMessage.value = ''
   }
 })
 
-onMounted(() => {})
-onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKey)
+})
 </script>
 
 <template>
   <div v-if="props.show" class="modal-overlay" @click.self="close">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Formulário de inscrição">
       <button class="modal-close" @click="close" aria-label="Fechar">×</button>
-      <h3>Inscreva-se no LeveMENTE</h3>
+  <h3>Inscreva-se no <span class="brand-green">leveMente</span></h3>
       <p>Preencha o formulário para receber informações e começar sua jornada.</p>
       <form class="signup-form" @submit="submit">
         <label>
@@ -71,7 +172,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         </label>
         <label>
           Telefone
-          <input v-model="form.phone" type="text" placeholder="(11) 9xxxx-xxxx" />
+          <input v-model="form.phone" @input="onPhoneInput" inputmode="tel" type="text" placeholder="(11) 9xxxx-xxxx" />
         </label>
         <label>
           Mensagem (opcional)
@@ -84,6 +185,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         </div>
 
         <div v-if="submitted" class="signup-success">Obrigado! Sua inscrição foi recebida.</div>
+        <div v-if="serverMessage" class="server-message">{{ serverMessage }}</div>
       </form>
     </div>
   </div>
@@ -197,5 +299,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 .btn-secondary:hover {
   background: #16a34a;
   color: white;
+}
+
+.server-message {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #065f46;
+}
+
+.brand-green {
+  color: #16a34a; /* verde consistente com o tema */
+  font-weight: 600;
 }
 </style>

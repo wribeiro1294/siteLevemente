@@ -21,7 +21,7 @@ const faqs = ref([
   },
   {
     question: 'Como posso me inscrever?',
-    answer: 'Preencha o nosso formulário em ',
+    answer: 'Preencha o nosso formulário e aguarde o nosso contato. ',
     open: false
   }
 ])
@@ -54,7 +54,7 @@ const services = ref([
   },
    {
     title: '',
-    description: 'Aula de alongamento e mobilidade para fazer em casa'
+    description: 'Aula de alongamento e mobilidade para fazer em casa.'
   }
 ])
 
@@ -95,7 +95,7 @@ const onSignup = (data) => {
     <div class="container">
       <div class="hero-content">
         <div class="hero-text fade-up" style="animation-delay:120ms">
-          <h1>Mudança da <span class="highlight">mente</span> com leveza</h1>
+          <h1>Mudança da <span class="highlight">mente</span> com leveza.</h1>
           <p class="hero-subtitle">Descubra o caminho para uma vida mais saudavel, equilibrada e sustentavel. Nossa abordagem integra saúde mental e fisica para resultados reais e duradouros.</p>
           <div class="hero-buttons">
             <button class="btn-primary" @click="showSignup = true">Comece sua jornada</button>
@@ -167,36 +167,42 @@ const onSignup = (data) => {
       <div class="team">
         <h2 class="team-title">Nossos Profissionais</h2>
         <div class="team-card">
-          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <!-- Assumes images are placed in public/images/profissionais/ as thaissa.jpg -->
+          <img src="/images/profissionais/thaissa.png" alt="Thaissa - Nutricionista" class="team-photo" />
           <h3>Thaissa</h3>
           <p>Nutricionista</p>
           <div class="team-social">
-            <a href="#" aria-label="Facebook">📘</a>
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="LinkedIn">💼</a>
-            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="https://www.instagram.com/thaissanut/" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+              </svg>
+            </a>
           </div>
         </div>
         <div class="team-card">
-          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <!-- Assumes images are placed in public/images/profissionais/ as wilka.jpg -->
+          <img src="/images/profissionais/wilka.jpeg" alt="Wilka - Psicóloga" class="team-photo" />
           <h3>Wilka</h3>
           <p>Psicologa</p>
           <div class="team-social">
-            <a href="#" aria-label="Facebook">📘</a>
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="LinkedIn">💼</a>
-            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="https://www.instagram.com/wilkacordeiro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+              </svg>
+            </a>
           </div>
         </div>
         <div class="team-card">
-          <img src="https://via.placeholder.com/150" alt="Foto" class="team-photo" />
+          <!-- Assumes images are placed in public/images/profissionais/ as gabriel.jpg -->
+          <img src="/images/profissionais/gabriel.png" alt="Gabriel - Personal Trainer" class="team-photo" />
           <h3>Gabriel</h3>
           <p>Personal Trainer</p>
           <div class="team-social">
-            <a href="#" aria-label="Facebook">📘</a>
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="LinkedIn">💼</a>
-            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="https://www.instagram.com/gabriel_linharesm/" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
@@ -237,7 +243,7 @@ const onSignup = (data) => {
     </div>
   </section>
 
-  <SignupModal v-model:show="showSignup" @submitted="onSignup" />
+  <SignupModal v-model:show="showSignup" :appsScriptUrl="'https://script.google.com/macros/s/AKfycbznVgx3QHMjw1APSk48Gz6u4aJGHnwpJkMKWX5FtsV4_h5bXyCAtg0jv6g3YNHWzQke/exec'" @submitted="onSignup" />
 
   <!-- Footer -->
   <footer class="footer">
@@ -249,10 +255,7 @@ const onSignup = (data) => {
           </div>
           <p>Transformando vidas através do equilíbrio entre corpo e mente. Sua jornada de bem-estar começa aqui.</p>
           <div class="social-links">
-            <a href="#" aria-label="Facebook">📘</a>
             <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="LinkedIn">💼</a>
-            <a href="#" aria-label="Twitter">🐦</a>
           </div>
         </div>
         <div class="footer-links">
@@ -275,7 +278,7 @@ const onSignup = (data) => {
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 LeveMENTE. Todos os direitos reservados.</p>
+        <p>&copy; 2026 desenvolvido por TEMET DESENVOLVIMENTO.</p>
         <div class="footer-legal">
           <a href="#">Política de Privacidade</a>
           <a href="#">Termos de Uso</a>
@@ -715,9 +718,18 @@ h4 { font-size: 1.25rem; }
 
 .team-photo {
   width: 100%;
-  height: auto;
+  /* fixed height so all cards align regardless of original image aspect ratio */
+  height: 220px;
+  object-fit: cover; /* crop to fill the box while preserving aspect ratio */
   border-radius: 12px;
   margin-bottom: 16px;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .team-photo {
+    height: 180px;
+  }
 }
 
 .team-social {
