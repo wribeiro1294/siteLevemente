@@ -112,7 +112,7 @@ const onSignup = (data) => {
             <div class="card-icon">✨</div>
             <div class="card-content">
               <h4>Resultado Garantido</h4>
-              <p>Metodologia comprovada</p>
+              <!-- <p>Metodologia comprovada</p> -->
             </div>
           </div>
         </div>
