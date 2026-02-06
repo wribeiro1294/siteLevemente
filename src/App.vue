@@ -150,14 +150,14 @@ const onSignup = (data) => {
             </div>
             <div class="feature">
               <div class="feature-icon">✓</div>
-              <span>Metodologia cientificamente comprovada</span>
+              <span>Metodologia comprovada</span>
             </div>
             <div class="feature">
               <div class="feature-icon">✓</div>
               <span>Resultados mensuráveis</span>
             </div>
           </div>
-          <button class="btn-primary">Conheça nossa metodologia</button>
+          <!-- <button class="btn-primary">Conheça nossa metodologia</button> -->
         </div>
         <div class="about-image">
           <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Equipe profissional" />
