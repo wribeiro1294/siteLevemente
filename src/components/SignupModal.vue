@@ -159,7 +159,7 @@ onBeforeUnmount(() => {
   <div v-if="props.show" class="modal-overlay" @click.self="close">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Formulário de inscrição">
       <button class="modal-close" @click="close" aria-label="Fechar">×</button>
-  <h3>Inscreva-se no <span class="brand-green">leveMente</span></h3>
+  <h3>Inscreva-se no <span class="brand-green">LEVEMENTE</span></h3>
       <p>Preencha o formulário para receber informações e começar sua jornada.</p>
       <form class="signup-form" @submit="submit">
         <label>

@@ -77,7 +77,7 @@ const onSignup = (data) => {
     <div class="container">
       <nav class="nav">
         <div class="logo">
-          <span class="logo-text">LeveMENTE</span>
+          <span class="logo-text"><span class="logo-left">LEVE</span><span class="logo-right">MENTE</span></span>
         </div>
         <ul class="nav-menu">
           <li><a href="#inicio">Início</a></li>
@@ -249,9 +249,9 @@ const onSignup = (data) => {
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <div class="footer-brand">
+          <div class="footer-brand">
           <div class="logo">
-            <span class="logo-text">LeveMENTE</span>
+            <span class="logo-text"><span class="logo-left">LEVE</span><span class="logo-right">MENTE</span></span>
           </div>
           <p>Transformando vidas através do equilíbrio entre corpo e mente. Sua jornada de bem-estar começa aqui.</p>
           <div class="social-links">
@@ -414,11 +414,17 @@ h4 { font-size: 1.25rem; }
   font-size: 1.9rem;
   font-weight: 700;
   letter-spacing: 0.6px;
-  background: linear-gradient(135deg, #22c55e 0%, #065f46 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   justify-self: center;
+  display: inline-block;
+}
+
+.logo-left {
+  color: #3f4337; /* escuro - aproximação da cor da imagem (lado esquerdo) */
+}
+
+.logo-right {
+  color: #afc09e; /* verde claro - aproximação da cor da imagem (lado direito) */
+  margin-left: 6px;
 }
 
 .nav-menu {
