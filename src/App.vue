@@ -15,6 +15,12 @@ const faqs = ref([
     open: false
   },
   {
+    question: 'Jornada',
+    answer: 'INICIO: 23/02/2026   FIM: 09/03/2026',
+    open: false
+  },
+  
+  {
     question: 'Investimento',
     answer: 'R$ 49,90',
     open: false
