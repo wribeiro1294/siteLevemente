@@ -82,9 +82,8 @@ const onSignup = (data) => {
         <ul class="nav-menu">
           <li><a href="#inicio">Início</a></li>
           <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#conteudos">Conteúdos</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
     </div>
@@ -121,7 +120,7 @@ const onSignup = (data) => {
   </section>
 
   <!-- Serviços Section -->
-  <section id="servicos" class="services">
+  <section id="conteudos" class="services">
     <div class="container">
       <div class="section-header">
         <h2>CONTEÚDOS COMO:</h2>
@@ -264,7 +263,7 @@ const onSignup = (data) => {
             <ul>
               <li><a href="#inicio">Início</a></li>
               <li><a href="#sobre">Sobre</a></li>
-              <li><a href="#servicos">Conteúdos</a></li>
+              <li><a href="#conteudos">Conteúdos</a></li>
               <li><a href="#faq">FAQ</a></li>
             </ul>
           </div>
@@ -691,13 +690,15 @@ h4 { font-size: 1.25rem; }
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Team Section */
 .team {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 32px;
   margin-top: 40px;
 }
+
+/* Team Section */
+
 
 .team-title {
   grid-column: span 3;
@@ -723,17 +724,30 @@ h4 { font-size: 1.25rem; }
 
 .team-photo {
   width: 100%;
-  /* fixed height so all cards align regardless of original image aspect ratio */
+  /* fixed height on desktop so all cards align regardless of original image aspect ratio */
   height: 220px;
-  object-fit: cover; /* crop to fill the box while preserving aspect ratio */
+  object-fit: cover; /* crop to fill the box while preserving aspect ratio on larger screens */
   border-radius: 12px;
   margin-bottom: 16px;
   display: block;
 }
 
-@media (max-width: 480px) {
+/* On small screens, prefer showing the full image instead of cropping */
+@media (max-width: 768px) {
   .team-photo {
-    height: 180px;
+    height: auto; /* allow image to scale naturally */
+    object-fit: contain; /* avoid cropping */
+    max-height: 360px; /* limit extreme heights */
+  }
+
+  .team-card {
+    padding: 16px; /* reduce padding for smaller viewports */
+  }
+}
+
+@media (max-width: 420px) {
+  .team-photo {
+    max-height: 260px;
   }
 }
 
