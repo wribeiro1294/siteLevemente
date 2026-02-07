@@ -270,7 +270,7 @@ const onSignup = (data) => {
           <div class="link-group">
             <h4>Contato</h4>
             <ul>
-              <li><a href="#">pjlevemente@gmail.com</a></li>
+              <li>pjlevemente@gmail.com</li>
             </ul>
           </div>
         </div>
