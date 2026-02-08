@@ -1899,6 +1899,31 @@ const onSignup = (data) => {
     text-align: center;
   }
 
+
+  .about-features {
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .about-features .feature {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 8px;
+  }
+
+  .about-features .feature .feature-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
   .about-image {
     margin-top: 16px;
   }
