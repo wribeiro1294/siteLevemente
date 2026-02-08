@@ -1,6 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import SignupModal from './components/SignupModal.vue'
+
+// Mobile menu state
+const isMobileMenuOpen = ref(false)
+
+// Scroll state for header
+const isScrolled = ref(false)
+
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false
+}
+
+// Handle scroll for header background
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
 // Dados para FAQ
 const faqs = ref([
@@ -72,82 +99,115 @@ const toggleFaq = (index) => {
 const showSignup = ref(false)
 
 const onSignup = (data) => {
-  // handle submitted data (e.g., send to API). For now, just log.
   console.log('Signup submitted', data)
 }
 </script>
 
 <template>
   <!-- Header -->
-  <header class="header">
+  <header class="header" :class="{ 'header--scrolled': isScrolled }">
     <div class="container">
       <nav class="nav">
+        <!-- Logo -->
         <div class="logo">
-          <span class="logo-text"><span class="logo-left">LEVE</span><span class="logo-right">MENTE</span></span>
+          <span class="logo-text">
+            <span class="logo-left">LEVE</span>
+            <span class="logo-right">MENTE</span>
+          </span>
         </div>
+
+        <!-- Desktop Navigation -->
         <ul class="nav-menu">
-          <li><a href="#inicio">Início</a></li>
-          <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#conteudos">Conteúdos</a></li>
-          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#inicio" @click="closeMobileMenu">Início</a></li>
+          <li><a href="#sobre" @click="closeMobileMenu">Sobre</a></li>
+          <li><a href="#conteudos" @click="closeMobileMenu">Conteúdos</a></li>
+          <li><a href="#faq" @click="closeMobileMenu">FAQ</a></li>
         </ul>
+
+        <!-- Mobile Menu Button -->
+        <button 
+          class="mobile-menu-btn"
+          :class="{ 'mobile-menu-btn--active': isMobileMenuOpen }"
+          @click="toggleMobileMenu"
+          aria-label="Toggle menu"
+          aria-expanded="isMobileMenuOpen"
+        >
+          <span class="mobile-menu-btn__line"></span>
+          <span class="mobile-menu-btn__line"></span>
+          <span class="mobile-menu-btn__line"></span>
+        </button>
+
+        <!-- Mobile Navigation -->
+        <div 
+          class="mobile-nav"
+          :class="{ 'mobile-nav--open': isMobileMenuOpen }"
+        >
+          <ul class="mobile-nav__menu">
+            <li><a href="#inicio" @click="closeMobileMenu">Início</a></li>
+            <li><a href="#sobre" @click="closeMobileMenu">Sobre</a></li>
+            <li><a href="#conteudos" @click="closeMobileMenu">Conteúdos</a></li>
+            <li><a href="#faq" @click="closeMobileMenu">FAQ</a></li>
+          </ul>
+        </div>
+
       </nav>
     </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div 
+      v-if="isMobileMenuOpen" 
+      class="mobile-nav-overlay"
+      @click="closeMobileMenu"
+    ></div>
   </header>
 
   <!-- Hero Section -->
-  <section id="inicio" class="hero">
+  <section id="inicio" class="hero section-hero">
     <div class="container">
       <div class="hero-content">
-        <div class="hero-text fade-up" style="animation-delay:120ms">
-          <h1>Mudança da <span class="highlight">mente</span> com leveza.</h1>
-          <p class="hero-subtitle">Descubra o caminho para uma vida mais saudavel, equilibrada e sustentavel. Nossa abordagem integra saúde mental e fisica para resultados reais e duradouros.</p>
+        <div class="hero-text fade-up" style="animation-delay: 120ms">
+          <h1> <span class="highlight">Mudança</span> da mente com <span class="highlight">leveza</span>.</h1>
+          <p class="hero-subtitle">
+            Descubra o caminho para uma vida mais saudável, equilibrada e sustentável. 
+            Nossa abordagem integra saúde mental e física para resultados reais e duradouros.
+          </p>
           <div class="hero-buttons">
-            <button class="btn-primary" @click="showSignup = true">Comece sua jornada</button>
-            <button class="btn-secondary"><a href="#faq">Saiba mais</a></button>
-          </div>
-          <div class="hero-stats">
-            
-            
+            <button class="btn-primary btn-hero" @click="showSignup = true">
+              Comece sua jornada
+            </button>
+            <a href="#faq" class="btn-secondary">Saiba mais</a>
           </div>
         </div>
-     <div class="hero-image fade-up" style="animation-delay:240ms">
-          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pessoa praticando exercícios" />
-          <div class="hero-card">
-            <div class="card-icon">✨</div>
-            <div class="card-content">
-              <h4>Resultado Garantido</h4>
-              <!-- <p>Metodologia comprovada</p> -->
+        
+        <div class="hero-image fade-up" style="animation-delay: 240ms">
+          <div class="hero-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+              alt="Pessoa praticando exercícios"
+              loading="eager"
+            />
+            <div class="hero-card">
+              <div class="card-icon">✨</div>
+              <div class="card-content">
+                <h4>Resultado Garantido</h4>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Serviços Section -->
-  <section id="conteudos" class="services">
-    <div class="container">
-      <div class="section-header">
-        <h2>CONTEÚDOS COMO:</h2>
-      </div>
-      <div class="services-grid">
-        <div v-for="service in services" :key="service.title" class="service-card">
-          <h3>{{ service.title }}</h3>
-          <p>{{ service.description }}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Sobre Section -->
-  <section id="sobre" class="about">
+  <section id="sobre" class="about section-standard">
     <div class="container">
       <div class="about-content">
-        <div class="about-text">
+        <div class="about-text fade-up">
           <div class="section-tag">Sobre nós</div>
           <h2>Transformando vidas através do equilíbrio</h2>
-          <p>Te ajudaremos a ter uma rotina funcional, disciplina e constância. Introduzindo hábitos saudáveis que irão sustentar todo o seu processo.</p>
+          <p class="text-lead">
+            Te ajudaremos a ter uma rotina funcional, disciplina e constância. 
+            Introduzindo hábitos saudáveis que irão sustentar todo o seu processo.
+          </p>
           <div class="about-features">
             <div class="feature">
               <div class="feature-icon">✓</div>
@@ -162,52 +222,122 @@ const onSignup = (data) => {
               <span>Resultados mensuráveis</span>
             </div>
           </div>
-          <!-- <button class="btn-primary">Conheça nossa metodologia</button> -->
         </div>
-        <div class="about-image">
-          <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Equipe profissional" />
+        <div class="about-image fade-up" style="animation-delay: 200ms">
+          <img 
+            src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+            alt="Equipe profissional"
+            loading="lazy"
+          />
         </div>
       </div>
+      
       <!-- Team Section -->
-      <div class="team">
-        <h2 class="team-title">Nossos Profissionais</h2>
-        <div class="team-card">
-          <!-- Assumes images are placed in public/images/profissionais/ as thaissa.jpg -->
-          <img src="/images/profissionais/thaissa.png" alt="Thaissa - Nutricionista" class="team-photo" />
-          <h3>Thaissa</h3>
-          <p>Nutricionista</p>
-          <div class="team-social">
-            <a href="https://www.instagram.com/thaissanut/"  target="_blank" aria-label="Instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
-              </svg>
-            </a>
+      <div class="team-section">
+        <h2 class="team-title text-center">Nossos Profissionais</h2>
+        <div class="team-grid">
+          <div class="team-card team-card--alt fade-up" style="animation-delay: 100ms">
+            <div class="team-photo-wrapper">
+              <img 
+                src="/images/profissionais/thaissa.png" 
+                alt="Thaissa - Nutricionista" 
+                class="team-photo team-photo--thaissa" 
+                loading="lazy"
+              />
+            </div>
+            <div class="team-info">
+              <h3>Thaissa</h3>
+              <p>Nutricionista</p>
+              <div class="team-social">
+                <a 
+                  href="https://www.instagram.com/thaissanut/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Instagram da Thaissa"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card team-card--alt fade-up" style="animation-delay: 200ms">
+            <div class="team-photo-wrapper">
+              <img 
+                src="/images/profissionais/wilka.jpeg" 
+                alt="Wilka - Psicóloga" 
+                class="team-photo team-photo--wilka" 
+                loading="lazy"
+              />
+            </div>
+            <div class="team-info">
+              <h3>Wilka</h3>
+              <p>Psicóloga</p>
+              <div class="team-social">
+                <a 
+                  href="https://www.instagram.com/wilkacordeiro/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Instagram da Wilka"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card team-card--alt fade-up" style="animation-delay: 300ms">
+            <div class="team-photo-wrapper">
+              <img 
+                src="/images/profissionais/gabriel.png" 
+                alt="Gabriel - Personal Trainer" 
+                class="team-photo team-photo--gabriel"
+                loading="lazy"
+              />
+            </div>
+            <div class="team-info">
+              <h3>Gabriel</h3>
+              <p>Personal Trainer</p>
+              <div class="team-social">
+                <a 
+                  href="https://www.instagram.com/gabriel_linharesm/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Instagram do Gabriel"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="team-card">
-          <!-- Assumes images are placed in public/images/profissionais/ as wilka.jpg -->
-          <img src="/images/profissionais/wilka.jpeg" alt="Wilka - Psicóloga" class="team-photo" />
-          <h3>Wilka</h3>
-          <p>Psicologa</p>
-          <div class="team-social">
-            <a href="https://www.instagram.com/wilkacordeiro/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="team-card">
-          <!-- Assumes images are placed in public/images/profissionais/ as gabriel.jpg -->
-          <img src="/images/profissionais/gabriel.png" alt="Gabriel - Personal Trainer" class="team-photo" />
-          <h3>Gabriel</h3>
-          <p>Personal Trainer</p>
-          <div class="team-social">
-            <a href="https://www.instagram.com/gabriel_linharesm/" target="_blank" aria-label="Instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zM17.5 6.5a1 1 0 110 2 1 1 0 010-2z"/>
-              </svg>
-            </a>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- Serviços Section -->
+  <section id="conteudos" class="services section-standard">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>CONTEÚDOS COMO:</h2>
+      </div>
+      <div class="services-grid grid-auto-fit-md">
+        <div 
+          v-for="(service, index) in services" 
+          :key="index" 
+          class="service-card fade-up"
+          :style="{ animationDelay: `${index * 100 + 200}ms` }"
+        >
+          <div class="service-content">
+            <h3 v-if="service.title">{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
           </div>
         </div>
       </div>
@@ -215,20 +345,33 @@ const onSignup = (data) => {
   </section>
 
   <!-- FAQ Section -->
-  <section id="faq" class="faq">
+  <section id="faq" class="faq section-standard">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header text-center">
         <h2>Perguntas Frequentes</h2>
-        <p>Tire suas principais dúvidas sobre nossos serviços</p>
       </div>
       <div class="faq-container">
         <div class="faq-list">
-          <div v-for="(faq, index) in faqs" :key="index" class="faq-item">
-            <button class="faq-question" @click="toggleFaq(index)">
+          <div 
+            v-for="(faq, index) in faqs" 
+            :key="index" 
+            class="faq-item fade-up"
+            :style="{ animationDelay: `${index * 100 + 200}ms` }"
+          >
+            <button 
+              class="faq-question" 
+              @click="toggleFaq(index)"
+              :aria-expanded="faq.open"
+              :aria-controls="`faq-answer-${index}`"
+            >
               <span>{{ faq.question }}</span>
               <span class="faq-toggle" :class="{ 'open': faq.open }">+</span>
             </button>
-            <div class="faq-answer" v-show="faq.open">
+            <div 
+              v-show="faq.open" 
+              class="faq-answer"
+              :id="`faq-answer-${index}`"
+            >
               <p>{{ faq.answer }}</p>
             </div>
           </div>
@@ -238,51 +381,60 @@ const onSignup = (data) => {
   </section>
 
   <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-content">
+  <section class="cta-section section-standard">
+    <div class="container text-center">
+      <div class="cta-content fade-up">
         <h2>Pronto para transformar sua vida?</h2>
         <p>Comece sua jornada de bem-estar hoje mesmo e descubra o seu melhor potencial.</p>
-        <button class="btn-primary large" @click="showSignup = true">Começar agora</button>
+        <button class="btn-primary btn-hero" @click="showSignup = true">
+          Começar agora
+        </button>
       </div>
     </div>
   </section>
 
-  <SignupModal v-model:show="showSignup" :appsScriptUrl="'https://script.google.com/macros/s/AKfycbznVgx3QHMjw1APSk48Gz6u4aJGHnwpJkMKWX5FtsV4_h5bXyCAtg0jv6g3YNHWzQke/exec'" @submitted="onSignup" />
+  <SignupModal 
+    v-model:show="showSignup" 
+    :appsScriptUrl="'https://script.google.com/macros/s/AKfycbx1zj8l1ixBnhzw7loNTP4fuCX8npyH5EPdM6aC2YR-KbPZKWqAvCKrUtgnMMFDVlXJ8g/exec'" 
+    @submitted="onSignup" 
+  />
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer section-standard">
     <div class="container">
       <div class="footer-content">
-          <div class="footer-brand">
+        <div class="footer-brand">
           <div class="logo">
-            <span class="logo-text"><span class="logo-left">LEVE</span><span class="logo-right">MENTE</span></span>
+            <span class="logo-text">
+              <span class="logo-left">LEVE</span>
+              <span class="logo-right">MENTE</span>
+            </span>
           </div>
-          <p>Transformando vidas através do equilíbrio entre corpo e mente. Sua jornada de bem-estar começa aqui.</p>
+          <p style="color:white">Transformando vidas através do equilíbrio entre corpo e mente. Sua jornada de bem-estar começa aqui.</p>
           <div class="social-links">
-            <!-- <a href="#" aria-label="Instagram">📷</a> -->
           </div>
         </div>
-        <div class="footer-links">
-          <div class="link-group">
-            <h4>Navegação</h4>
-            <ul>
-              <li><a href="#inicio">Início</a></li>
-              <li><a href="#sobre">Sobre</a></li>
-              <li><a href="#conteudos">Conteúdos</a></li>
-              <li><a href="#faq">FAQ</a></li>
-            </ul>
-          </div>
-          <div class="link-group">
-            <h4>Contato</h4>
-            <ul>
-              <li>pjlevemente@gmail.com</li>
-            </ul>
-          </div>
+        
+        <div class="link-group">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#conteudos">Conteúdos</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        
+        <div class="link-group">
+          <h4>Contato</h4>
+          <ul>
+            <li>pjlevemente@gmail.com</li>
+          </ul>
         </div>
       </div>
+      
       <div class="footer-bottom">
-        <p>&copy; 2026 desenvolvido por TEMET DESENVOLVIMENTO.</p>
+        <p style="color:white">&copy; 2026 desenvolvido por TEMET DESENVOLVIMENTO.</p>
         <div class="footer-legal">
           <a href="#">Política de Privacidade</a>
           <a href="#">Termos de Uso</a>
@@ -293,182 +445,824 @@ const onSignup = (data) => {
 </template>
 
 <style scoped>
-/* Reset e Importações */
+/* ============================================
+   IMPORTS AND SETUP
+   ============================================ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
-  color: #1e293b;
-  background-color: #ffffff;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Utility: full-bleed container for sections that must span the entire viewport width */
-.container--full {
-  max-width: 100%;
-  padding-left: 48px;
-  padding-right: 48px;
-}
-
-/* Tipografia */
-h1, h2, h3, h4 {
-  font-weight: 600;
-  line-height: 1.2;
-  color: #0f172a;
-}
-
-h1 { font-size: 3.5rem; }
-h2 { font-size: 2.5rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-
-/* Motion */
-.fade-up {
-  opacity: 0;
-  transform: translateY(12px);
-  animation: fadeUp 700ms ease forwards;
-}
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Botões */
-.btn-primary, .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 16px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #22c55e 0%, #065f46 100%);
-  color: white;
-  box-shadow: 0 4px 14px 0 rgba(22, 163, 74, 0.25);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px 0 rgba(22, 163, 74, 0.35);
-}
-
-.btn-primary.large {
-  padding: 16px 32px;
-  font-size: 18px;
-}
-
-.btn-secondary {
-  background: transparent;
-  color: #16a34a;
-  border: 2px solid #16a34a;
-}
-
-.btn-secondary:hover {
-  background: #16a34a;
-  color: white;
-}
-
-/* Header */
+/* ============================================
+   HEADER AND NAVIGATION
+   ============================================ */
 .header {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid #e2e8f0;
-  z-index: 1000;
+  border-bottom: 1px solid var(--color-border);
+  z-index: var(--z-fixed);
+  transition: all var(--transition-normal);
+  height: var(--header-height);
+}
+
+.header--scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-md);
 }
 
 .nav {
-  /* Use grid to visually center the logo while keeping nav controls aligned to the right */
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 0;
+  /* cluster logo and links closer together */
+  justify-content: flex-start;
+  height: var(--header-height);
+  position: relative;
 }
 
+/* Logo */
 .logo-text {
-  font-size: 1.9rem;
+  font-size: clamp(1.5rem, 4vw, 1.9rem);
   font-weight: 700;
   letter-spacing: 0.6px;
-  justify-self: center;
   display: inline-block;
+  line-height: 1;
 }
 
 .logo-left {
-  color: #3f4337; /* escuro - aproximação da cor da imagem (lado esquerdo) */
+  color: #3f4337;
 }
 
 .logo-right {
-  color: #afc09e; /* verde claro - aproximação da cor da imagem (lado direito) */
+  color: #afc09e;
   margin-left: 6px;
 }
 
+/* Desktop Navigation */
 .nav-menu {
-  display: flex;
+  display: none;
   list-style: none;
-  gap: 28px;
-  justify-self: end;
+  /* reduce gap so links are closer together */
+  gap: var(--space-3);
   align-items: center;
+  margin: 0;
+  padding: 0;
+  /* small left margin to visually separate from logo */
+  margin-left: var(--space-4);
 }
 
 .nav-menu a {
   text-decoration: none;
-  color: #334155;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: color 0.16s ease, transform 0.16s ease;
-  padding: 6px 8px;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+  padding: var(--space-2) var(--space-3);
   border-radius: 8px;
+  position: relative;
 }
 
 .nav-menu a:hover {
-  color: #065f46;
-  transform: translateY(-2px);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-50);
+  transform: translateY(-1px);
 }
 
-.nav-cta {
-  background: linear-gradient(135deg, #22c55e 0%, #065f46 100%);
-  color: white;
+/* Desktop CTA Button removed - styles cleaned up */
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 44px;
+  height: 44px;
+  background: transparent;
   border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-  justify-self: end;
+  padding: 8px;
+  z-index: var(--z-modal);
+  transition: all var(--transition-normal);
 }
 
-.nav-cta:hover {
+.mobile-menu-btn__line {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: all var(--transition-normal);
+  transform-origin: center;
+}
+
+.mobile-menu-btn--active .mobile-menu-btn__line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn--active .mobile-menu-btn__line:nth-child(2) {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.mobile-menu-btn--active .mobile-menu-btn__line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  max-height: 0;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  z-index: var(--z-dropdown);
+}
+
+.mobile-nav--open {
+  max-height: calc(100vh - var(--header-height));
+  box-shadow: var(--shadow-lg);
+}
+
+.mobile-nav__menu {
+  list-style: none;
+  padding: var(--space-4) 0;
+  margin: 0;
+}
+
+.mobile-nav__menu li {
+  padding: 0 var(--container-padding);
+}
+
+.mobile-nav__menu a {
+  display: block;
+  padding: var(--space-4) 0;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--font-size-lg);
+  border-bottom: 1px solid var(--color-border);
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav__menu a:hover {
+  color: var(--color-primary);
+  padding-left: var(--space-2);
+}
+
+/* mobile nav CTA removed - no styles needed */
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: var(--z-modal-backdrop);
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* ============================================
+   RESPONSIVE NAVIGATION BEHAVIOR
+   ============================================ */
+
+/* Show desktop nav on tablets and up */
+@media (min-width: 768px) {
+  .nav-menu {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: none;
+  }
+}
+
+/* Adjust logo size for small screens */
+@media (max-width: 479px) {
+  .logo-text {
+    font-size: 1.4rem;
+  }
+  
+  .nav {
+    padding: 0 var(--space-2);
+  }
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  background: #d5ddc8;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+  align-items: center;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.hero-text {
+  text-align: center;
+  max-width: 100%;
+}
+
+.hero-text h1 {
+  margin-bottom: var(--space-6);
+  line-height: 1.1;
+  font-size: var(--font-size-4xl);
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+  max-width: 100%;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero-image-container {
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: var(--shadow-xl);
+  display: block;
+}
+
+.hero-card {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: white;
+  padding: var(--space-4) var(--space-5);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: calc(100% - 20px);
+}
+
+.card-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.card-content h4 {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+/* ============================================
+   HERO RESPONSIVE DESIGN
+   ============================================ */
+
+/* Small devices (480px and up) */
+@media (min-width: 480px) {
+  .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .hero-card {
+    bottom: -15px;
+    right: -15px;
+    padding: var(--space-5) var(--space-6);
+  }
+  
+  .card-content h4 {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Medium devices (768px and up) - Tablets */
+@media (min-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    text-align: left;
+  }
+  
+  .hero-text {
+    text-align: left;
+  }
+  
+  .hero-buttons {
+    justify-content: flex-start;
+  }
+  
+  .hero-image {
+    order: 2;
+  }
+  
+  .hero-text {
+    order: 1;
+  }
+}
+
+/* Large devices (1024px and up) - Desktops */
+@media (min-width: 1024px) {
+  .hero-content {
+    gap: var(--space-16);
+  }
+  
+  .hero-card {
+    bottom: -20px;
+    right: -20px;
+    padding: var(--space-6);
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+  }
+  
+  .card-content h4 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Extra large devices (1280px and up) - Large Desktops */
+@media (min-width: 1280px) {
+  .hero-content {
+    gap: var(--space-20);
+  }
+}
+
+/* 2XL devices (1536px and up) - TVs and very large screens */
+@media (min-width: 1536px) {
+  .hero-content {
+    gap: var(--space-24);
+  }
+  
+  .hero-text h1 {
+    font-size: var(--font-size-5xl);
+  }
+  
+  .hero-subtitle {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* FAQ Section */
+.faq {
+  background: white;
+}
+
+/* Reduce vertical gap between the 'Conteúdos' section and FAQ to bring them closer visually. */
+.faq.section-standard {
+  /* keep overall padding but reduce the top spacing specifically for this section */
+  padding-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  transition: all var(--transition-fast);
+}
+
+.faq-item:hover {
+  border-color: var(--color-primary-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.faq-question {
+  width: 100%;
+  padding: var(--space-6);
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all var(--transition-fast);
+  color: var(--color-heading);
+  gap: var(--space-4);
+}
+
+.faq-question:hover {
+  background: var(--color-gray-50);
+}
+
+.faq-toggle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--color-primary);
+  transition: transform var(--transition-normal);
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-toggle.open {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  padding: 0 var(--space-6) var(--space-6);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-content h2 {
+  color: white;
+  margin-bottom: var(--space-4);
+}
+
+.cta-content p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-8);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-content .btn-primary {
+  background: white;
+  color: var(--color-primary);
+}
+
+.cta-content .btn-primary:hover {
+  background: var(--color-gray-50);
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(6, 95, 70, 0.18);
+}
+
+/* Footer */
+.footer {
+  background: var(--color-gray-900);
+  color: var(--color-gray-400);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+}
+
+.footer-brand {
+  text-align: center;
+}
+
+.footer-brand p {
+  margin: var(--space-4) 0 var(--space-6);
+  line-height: 1.6;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+}
+
+.link-group {
+  text-align: center;
+}
+
+.link-group h4 {
+  color: white;
+  margin-bottom: var(--space-4);
+}
+
+.link-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-group li {
+  margin-bottom: var(--space-2);
+}
+
+.link-group a {
+  color: var(--color-gray-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link-group a:hover {
+  color: white;
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--color-gray-800);
+  padding-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  text-align: center;
+}
+
+.footer-legal {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-legal a {
+  color: var(--color-gray-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-legal a:hover {
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 479px) {
+  .faq-question {
+    padding: var(--space-4);
+    font-size: var(--font-size-base);
+  }
+  
+  .faq-answer {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    grid-template-columns: 2fr 1fr 1fr;
+    text-align: left;
+  }
+  
+  .footer-brand {
+    text-align: left;
+  }
+  
+  .social-links {
+    justify-content: flex-start;
+  }
+  
+  .link-group {
+    text-align: left;
+  }
+  
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+}
+.hero {
+  background: #d5ddc8;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+  align-items: center;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.hero-text {
+  text-align: center;
+  max-width: 100%;
+}
+
+.hero-text h1 {
+  margin-bottom: var(--space-6);
+  line-height: 1.1;
+  font-size: var(--font-size-4xl);
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+  max-width: 100%;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero-image-container {
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: var(--shadow-xl);
+  display: block;
+}
+
+.hero-card {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: white;
+  padding: var(--space-4) var(--space-5);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: calc(100% - 20px);
+}
+
+.card-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.card-content h4 {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+/* ============================================
+   HERO RESPONSIVE DESIGN
+   ============================================ */
+
+/* Small devices (480px and up) */
+@media (min-width: 480px) {
+  .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .hero-card {
+    bottom: -15px;
+    right: -15px;
+    padding: var(--space-5) var(--space-6);
+  }
+  
+  .card-content h4 {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Medium devices (768px and up) - Tablets */
+@media (min-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    text-align: left;
+  }
+  
+  .hero-text {
+    text-align: left;
+  }
+  
+  .hero-buttons {
+    justify-content: flex-start;
+  }
+  
+  .hero-image {
+    order: 2;
+  }
+  
+  .hero-text {
+    order: 1;
+  }
+}
+
+/* Large devices (1024px and up) - Desktops */
+@media (min-width: 1024px) {
+  .hero-content {
+    gap: var(--space-16);
+  }
+  
+  .hero-card {
+    bottom: -20px;
+    right: -20px;
+    padding: var(--space-6);
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+  }
+  
+  .card-content h4 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Extra large devices (1280px and up) - Large Desktops */
+@media (min-width: 1280px) {
+  .hero-content {
+    gap: var(--space-20);
+  }
+}
+
+/* 2XL devices (1536px and up) - TVs and very large screens */
+@media (min-width: 1536px) {
+  .hero-content {
+    gap: var(--space-24);
+  }
+  
+  .hero-text h1 {
+    font-size: var(--font-size-5xl);
+  }
+  
+  .hero-subtitle {
+    font-size: var(--font-size-xl);
+  }
 }
 
 /* Hero Section */
@@ -577,7 +1371,8 @@ h4 { font-size: 1.25rem; }
 
 /* Serviços Section */
 .services {
-  padding: 150px 0; /* Increased padding to make the content more centered */
+
+  padding: clamp(48px, 8vw, 100px) 0;
   background: #065f46; /* Keep the green background */
 }
 
@@ -588,7 +1383,8 @@ h4 { font-size: 1.25rem; }
 
 .section-header h2 {
   margin-bottom: 16px;
-  color: white; /* Set the title color to white */
+  color: white;
+  font-size: 40px
 }
 
 .section-header p {
@@ -728,21 +1524,151 @@ h4 { font-size: 1.25rem; }
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* Alternative horizontal card: image on the left, info on the right */
+.team-card--alt {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid var(--color-primary);
+  text-align: left;
+}
+
+.team-card--alt .team-photo {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.team-card--alt .team-info {
+  padding-left: 4px;
+}
+
+.team-card--alt h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--color-heading);
+}
+
+.team-card--alt p {
+  margin: 0 0 8px 0;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+  /* Compact horizontal card on small screens to match reference
+     keep image at left (small square) and text at right, reduce padding/gap */
+  .team-card--alt {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 10px 12px;
+    gap: 12px;
+    border-left-width: 0; /* remove thick left stripe */
+    border-top: 4px solid var(--color-primary); /* subtle top accent to match visual */
+    border-radius: 12px;
+  }
+
+  .team-card--alt .team-photo {
+    width: 84px;
+    height: 84px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center 20%;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .team-card--alt .team-info {
+    padding-left: 0;
+    margin-top: 0;
+  }
+
+  .team-card--alt h3 {
+    font-size: 1.125rem;
+    margin-bottom: 4px;
+  }
+
+  .team-card--alt p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Reduce white-space around the grid */
+  .team-grid {
+    gap: 12px;
+  }
+}
+
+/* Tighter cards for tablet and mobile: reduce image and padding so cards fit better */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .team-card--alt {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .team-card--alt .team-photo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .team-card--alt h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Ensure other mobile overrides remain consistent with compact layout */
+  .team-card--alt {
+    padding: 10px 12px;
+    border-left-width: 0;
+    border-top-width: 4px;
+  }
+
+  .team-card--alt .team-photo {
+    width: 84px;
+    height: 84px;
+  }
+
+  .team-card--alt h3 {
+    font-size: 1.125rem;
+  }
+
+  .team-card--alt p {
+    font-size: 0.95rem;
+  }
+}
+
 .team-photo {
   width: 100%;
-  /* fixed height on desktop so all cards align regardless of original image aspect ratio */
-  height: 220px;
+  /* a touch taller so there's more vertical room when faces are framed low in source photos */
+  height: 260px;
   object-fit: cover; /* crop to fill the box while preserving aspect ratio on larger screens */
+  /* default: slightly favor the upper-middle of the photo so faces appear centered */
+  object-position: center 20%;
   border-radius: 12px;
   margin-bottom: 16px;
   display: block;
 }
 
+.team-photo--thaissa { object-position: center 30%; }
+.team-photo--wilka   { object-position: center 18%; }
+.team-photo--gabriel { object-position: center 12%; }
+
 /* On small screens, prefer showing the full image instead of cropping */
 @media (max-width: 768px) {
   .team-photo {
     height: auto; /* allow image to scale naturally */
-    object-fit: contain; /* avoid cropping */
+    /* On small screens prefer cover with top alignment so faces remain visible while preserving card layout */
+    object-fit: cover;
+    object-position: center 18%;
     max-height: 360px; /* limit extreme heights */
   }
 
@@ -778,6 +1704,11 @@ h4 { font-size: 1.25rem; }
 .faq {
   padding: 100px 0;
   background: white;
+}
+
+/* FAQ heading uses the site primary green to match brand */
+.faq .section-header h2 {
+  color: #334155;
 }
 
 .faq-container {
@@ -981,6 +1912,24 @@ h4 { font-size: 1.25rem; }
   .team-card {
     align-items: center;
     text-align: center;
+    padding: 12px; /* compact card padding on mobile */
+  }
+
+  /* Make the alt cards much more compact on small screens: smaller image, smaller gap */
+  .team-card--alt {
+    padding: 10px;
+    border-left-width: 0; /* remove accent stripe on narrow viewports */
+  }
+
+  .team-card--alt .team-photo {
+    width: 96px;
+    height: 96px;
+    border-radius: 8px;
+    margin: 0 auto 12px;
+  }
+
+  .team-grid {
+    gap: var(--space-4);
   }
 
   .faq-container {
@@ -1051,10 +2000,7 @@ h4 { font-size: 1.25rem; }
     flex-wrap: wrap;
   }
 
-  .nav-cta {
-    justify-self: center;
-    align-self: center;
-  }
+  /* nav-cta removed */
 
   /* Reduce hero footprint on mobile */
   .hero {
